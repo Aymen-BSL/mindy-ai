@@ -2,12 +2,62 @@
 
 import { useEffect, useState } from "react";
 import Button from "./components/Button";
+import ActivityCard from "./components/ActivityCard";
+
+interface Activity {
+  emoji: string;
+  title: string;
+  frequency: string;
+  description: string;
+  youtubeLink: string;
+}
 
 export default function ReportPage() {
   const [isButtonUnlocked, setIsButtonUnlocked] = useState(false);
   const [remainingDays, setRemainingDays] = useState(7);
+  const [activities, setActivities] = useState<Activity[]>([]);
+
+  // Mock API data for testing
+  const mockActivities = [
+    {
+      emoji: "🧘‍♂️",
+      title: "Meditation",
+      frequency: "7",
+      description:
+        "Meditation helps reduce stress and improve focus. Try guided meditations on YouTube.",
+      youtubeLink: "https://www.youtube.com/embed/example-video-id",
+    },
+    {
+      emoji: "🏃‍♂️",
+      title: "Running",
+      frequency: "5",
+      description: "Running improves cardiovascular health and boosts mood.",
+      // No YouTube link for this activity
+    },
+    {
+      emoji: "📖",
+      title: "Reading",
+      frequency: "3",
+      description:
+        "Reading enhances knowledge and reduces stress. Try reading a book for 30 minutes.",
+      youtubeLink: "https://www.youtube.com/embed/yet-another-video-id",
+    },
+  ];
 
   useEffect(() => {
+    // Simulate fetching data from an API
+    const fetchActivities = async () => {
+      try {
+        // Simulate a delay for API call
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        setActivities(mockActivities); // Use mock data
+      } catch (error) {
+        console.error("Failed to fetch activities:", error);
+      }
+    };
+
+    fetchActivities();
+
     // Check local storage for the first visit timestamp
     const firstVisit = localStorage.getItem("firstVisit");
     const now = new Date();
@@ -39,15 +89,16 @@ export default function ReportPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
       {/* White Container */}
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-2xl p-6">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-4xl p-10">
         {/* Report Section */}
-        <section className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">
+        <section className="mb-12">
+          {/* gray-800 */}
+          <h1 className="text-4xl font-bold text-[#aa87e5] mb-4">
             Your Mental Health Report
           </h1>
-          <p className="text-gray-600">
+          <p className="text-gray-600 ml-2">
             Based on your recent interactions, here are some activities to help
             you improve your mental health.
           </p>
@@ -56,39 +107,23 @@ export default function ReportPage() {
         {/* Activities Section */}
         <section>
           <h2 className="text-xl font-semibold text-gray-800 mb-4">
-            Suggested Activities
+            Make your week special with these activities
           </h2>
-          <div className="space-y-4">
-            {/* Activity Card */}
-            <div className="border rounded-lg p-4">
-              <div className="flex items-center space-x-4">
-                <span className="text-4xl">🧘‍♂️</span> {/* Larger Emoji */}
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-800">
-                    Meditation
-                  </h3>
-                  <p className="text-sm text-gray-600">
-                    <span className="font-bold">7</span> times per week
-                  </p>
-                </div>
-              </div>
-              <p className="mt-2 text-gray-600">
-                Meditation helps reduce stress and improve focus. Try guided
-                meditations on YouTube.
-              </p>
-              {/* YouTube Embed */}
-              <div className="mt-4">
-                <iframe
-                  className="w-full h-48 rounded-lg"
-                  src="https://www.youtube.com/embed/example-video-id"
-                  title="YouTube video player"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                ></iframe>
-              </div>
-            </div>
-
-            {/* Add more activities here */}
+          <div className="space-y-6">
+            {activities.length > 0 ? (
+              activities.map((activity, index) => (
+                <ActivityCard
+                  key={index}
+                  emoji={activity.emoji}
+                  title={activity.title}
+                  frequency={activity.frequency}
+                  description={activity.description}
+                  youtubeLink={activity.youtubeLink}
+                />
+              ))
+            ) : (
+              <p className="text-gray-600">Loading activities...</p>
+            )}
           </div>
         </section>
 
