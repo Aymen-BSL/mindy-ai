@@ -109,7 +109,7 @@ export default function Page1() {
 
         <button
           type="submit"
-          className="text-white py-3 px-8 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-300 ease-in-out"
+          className="text-white py-3 px-8 rounded-xl w-full focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-300 ease-in-out"
           style={{ backgroundColor: "#745E96", float: "left" }}
           onMouseEnter={(e) =>
             (e.currentTarget.style.backgroundColor = "#BCA4E3")
