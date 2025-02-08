@@ -27,7 +27,7 @@ export default function Page1() {
         className="bg-white p-8 rounded-lg shadow-md w-full max-w-2xl"
       >
         <h1
-          className="text-2xl font-bold mb-6 text-center"
+          className="text-4xl font-bold mb-6 text-center"
           style={{ color: "#745E96" }}
         >
           Coach Session Form

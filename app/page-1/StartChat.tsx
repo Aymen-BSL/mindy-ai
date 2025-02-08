@@ -49,6 +49,6 @@ export default function StartChat({ name, age, conversation_time }: userProps) {
       }
     };
     handleStartChat();
-  }, [name, age, conversation_time]);
+  }, [name, age, conversation_time, messages]);
   return null;
 }

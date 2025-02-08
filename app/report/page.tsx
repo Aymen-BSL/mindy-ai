@@ -26,8 +26,8 @@ export default function ReportPage() {
     const fetchReport = async () => {
       try {
         // Retrieve the user_id stored after starting a chat session
-        const userId = localStorage.getItem("userId") || 928351;
-        // const userId = 928351;
+        // const userId = localStorage.getItem("userId") || 928351;
+        const userId = 770805;
         if (!userId) {
           console.error("No user_id found in localStorage");
           return;
@@ -127,11 +127,12 @@ export default function ReportPage() {
 
         {/* Unlockable Button */}
         <div className="mt-8">
-          <Button onClick={handleUpdateProgress} disabled={!isButtonUnlocked}>
+          {/* <Button onClick={handleUpdateProgress} disabled={!isButtonUnlocked}>
             {isButtonUnlocked
               ? "Update Progress"
               : `Update Progress (Available in ${remainingDays} days)`}
-          </Button>
+          </Button> */}
+          <Button onClick={handleUpdateProgress}>Update Progress</Button>
         </div>
       </div>
     </div>

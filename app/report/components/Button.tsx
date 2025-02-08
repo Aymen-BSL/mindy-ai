@@ -18,7 +18,7 @@ export default function Button({
       className={`w-full py-2 px-4 rounded-lg transition-colors ${
         disabled
           ? "bg-gray-400 cursor-not-allowed"
-          : "bg-blue-500 hover:bg-blue-600"
+          : "bg-[#aa87e5] hover:bg-[#aa87e5]"
       } ${className}`}
       onClick={onClick}
       disabled={disabled}
