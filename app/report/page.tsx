@@ -1,91 +1,89 @@
-"use client"; // Add this at the top to enable client-side interactivity
+"use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Button from "./components/Button";
 import ActivityCard from "./components/ActivityCard";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface Activity {
   emoji: string;
   title: string;
   frequency: string;
   description: string;
-  youtubeLink: string;
+  youtubeLink?: string;
 }
 
 export default function ReportPage() {
+  const router = useRouter();
   const [isButtonUnlocked, setIsButtonUnlocked] = useState(false);
   const [remainingDays, setRemainingDays] = useState(7);
   const [activities, setActivities] = useState<Activity[]>([]);
-
-  // Mock API data for testing
-  const mockActivities = [
-    {
-      emoji: "🧘‍♂️",
-      title: "Meditation",
-      frequency: "7",
-      description:
-        "Meditation helps reduce stress and improve focus. Try guided meditations on YouTube.",
-      youtubeLink: "https://www.youtube.com/embed/example-video-id",
-    },
-    {
-      emoji: "🏃‍♂️",
-      title: "Running",
-      frequency: "5",
-      description: "Running improves cardiovascular health and boosts mood.",
-      // No YouTube link for this activity
-    },
-    {
-      emoji: "📖",
-      title: "Reading",
-      frequency: "3",
-      description:
-        "Reading enhances knowledge and reduces stress. Try reading a book for 30 minutes.",
-      youtubeLink: "https://www.youtube.com/embed/yet-another-video-id",
-    },
-  ];
+  const [reportText, setReportText] = useState<string>("");
 
   useEffect(() => {
-    // Simulate fetching data from an API
-    const fetchActivities = async () => {
+    const fetchReport = async () => {
       try {
-        // Simulate a delay for API call
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        setActivities(mockActivities); // Use mock data
+        // Retrieve the user_id stored after starting a chat session
+        const userId = localStorage.getItem("user_id") || 928351;
+        // const userId = 928351;
+        if (!userId) {
+          console.error("No user_id found in localStorage");
+          return;
+        }
+
+        // Call the GET /get-report/<user_id> endpoint
+        const response = await fetch(
+          `https://3b90-41-226-8-251.ngrok-free.app/get-report/${userId}`
+        );
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+
+        // The API now returns a Markdown-formatted report
+        setReportText(data.report || "");
+
+        // Map the API's activity objects to the format expected by ActivityCard
+        const formattedActivities = data.activities.map((activity: any) => ({
+          emoji: activity.activity_emoji,
+          title: activity.activity_name,
+          frequency: activity.activity_reps,
+          description: activity.activity_description,
+          youtubeLink: activity.activity_link, // This is optional per the API spec
+        }));
+        setActivities(formattedActivities);
       } catch (error) {
-        console.error("Failed to fetch activities:", error);
+        console.error("Failed to fetch report:", error);
       }
     };
 
-    fetchActivities();
+    fetchReport();
 
-    // Check local storage for the first visit timestamp
+    // Button unlock logic: using the first visit timestamp from localStorage.
     const firstVisit = localStorage.getItem("firstVisit");
     const now = new Date();
 
     if (!firstVisit) {
-      // If no timestamp exists, set it to the current time
       localStorage.setItem("firstVisit", now.toISOString());
     } else {
-      // Calculate the difference between now and the first visit
       const firstVisitDate = new Date(firstVisit);
       const diffInDays = Math.floor(
         (now.getTime() - firstVisitDate.getTime()) / (1000 * 60 * 60 * 24)
       );
-
-      // Calculate remaining days
       const daysLeft = 7 - diffInDays;
       setRemainingDays(daysLeft > 0 ? daysLeft : 0);
 
-      // Unlock the button if 7 days have passed
       if (diffInDays >= 7) {
         setIsButtonUnlocked(true);
       }
     }
   }, []);
 
+  // When the progress update button is clicked, replace the current route with /page4
   const handleUpdateProgress = () => {
-    alert("Progress updated!");
-    // Add logic to handle progress update here
+    router.replace("/page4");
   };
 
   return (
@@ -94,14 +92,14 @@ export default function ReportPage() {
       <div className="bg-white rounded-lg shadow-lg w-full max-w-4xl p-10">
         {/* Report Section */}
         <section className="mb-12">
-          {/* gray-800 */}
           <h1 className="text-4xl font-bold text-[#aa87e5] mb-4">
             Your Mental Health Report
           </h1>
-          <p className="text-gray-600 ml-2">
-            Based on your recent interactions, here are some activities to help
-            you improve your mental health.
-          </p>
+          <div className="text-gray-600 ml-2">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {reportText || "Your Mental Health Report"}
+            </ReactMarkdown>
+          </div>
         </section>
 
         {/* Activities Section */}

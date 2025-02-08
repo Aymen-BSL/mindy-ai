@@ -26,8 +26,7 @@ export default function ActivityCard({
         <div className="flex-1">
           <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
           <p className="text-sm text-gray-600">
-            <span className="font-bold text-[#aa87e5]">{frequency}</span> times
-            per week
+            <span className="font-bold text-[#aa87e5]">{frequency}</span>
           </p>
         </div>
       </div>
