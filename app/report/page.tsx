@@ -26,7 +26,7 @@ export default function ReportPage() {
     const fetchReport = async () => {
       try {
         // Retrieve the user_id stored after starting a chat session
-        const userId = localStorage.getItem("user_id") || 928351;
+        const userId = localStorage.getItem("userId") || 928351;
         // const userId = 928351;
         if (!userId) {
           console.error("No user_id found in localStorage");

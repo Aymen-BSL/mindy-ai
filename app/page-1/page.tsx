@@ -2,11 +2,13 @@
 "use client"; // This is necessary if you're using client-side interactivity (e.g., useState)
 
 import { useState } from "react";
+import StartChat from "./StartChat";
 
 export default function Page1() {
   const [name, setName] = useState("");
   const [age, setAge] = useState<number | "">("");
   const [time, setTime] = useState<string>("");
+  const [isStartChat, setIsStartChat] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -15,6 +17,7 @@ export default function Page1() {
       return;
     }
     alert(`Thank you, ${name}! You have selected ${time} for your session.`);
+    setIsStartChat(true);
   };
 
   return (
@@ -75,9 +78,9 @@ export default function Page1() {
               <input
                 type="radio"
                 name="time"
-                value="5mins"
-                checked={time === "5mins"}
-                onChange={() => setTime("5mins")}
+                value="5"
+                checked={time === "5"}
+                onChange={() => setTime("5")}
                 className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
               />
               <span className="ml-2 text-black">5 mins</span>
@@ -86,9 +89,9 @@ export default function Page1() {
               <input
                 type="radio"
                 name="time"
-                value="15mins"
-                checked={time === "15mins"}
-                onChange={() => setTime("15mins")}
+                value="15"
+                checked={time === "15"}
+                onChange={() => setTime("15")}
                 className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
               />
               <span className="ml-2 text-black">15 mins</span>
@@ -97,9 +100,9 @@ export default function Page1() {
               <input
                 type="radio"
                 name="time"
-                value="30mins"
-                checked={time === "30mins"}
-                onChange={() => setTime("30mins")}
+                value="30"
+                checked={time === "30"}
+                onChange={() => setTime("30")}
                 className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
               />
               <span className="ml-2 text-black">30 mins</span>
@@ -121,6 +124,9 @@ export default function Page1() {
           Next
         </button>
       </form>
+      {isStartChat && (
+        <StartChat name={name} age={Number(age)} conversation_time={time} />
+      )}
     </div>
   );
 }

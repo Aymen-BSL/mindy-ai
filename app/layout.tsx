@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { ChatProvider } from "./context/ChatContext";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -24,7 +25,7 @@ export default function RootLayout({
         className={`${inter.variable} antialiased`}
         style={{ fontFamily: "var(--font-inter)" }}
       >
-        {children}
+        <ChatProvider>{children}</ChatProvider>
       </body>
     </html>
   );
