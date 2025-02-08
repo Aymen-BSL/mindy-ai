@@ -1,9 +1,14 @@
 // StartChatComponent.tsx
 "use client";
-
 import { useState } from "react";
 
-export default function StartChatComponent() {
+interface userProps {
+  name: string;
+  age: number;
+  conversation_time: string;
+}
+
+export default function StartChat({ name, age, conversation_time }: userProps) {
   const [messages, setMessages] = useState([
     { text: "Hello! I'm Mindy, How are you feeling today?", sender: "bot" },
   ]);
@@ -17,9 +22,9 @@ export default function StartChatComponent() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: "Daly Chebbi",
-          age: 25,
-          conversation_time: "15", // Make sure this is a string
+          name: name,
+          age: age,
+          conversation_time: conversation_time, // Make sure this is a string
         }),
       });
 
