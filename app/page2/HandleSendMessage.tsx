@@ -1,48 +1,22 @@
-"use client";
 
 
-import { useChat } from "../context/ChatContext";
+const HandleSendMessage = async (message: string) => {
 
-export default function HandleSendMessage() {
-    const { messages } = useChat();
+    const response = await fetch('https://3b90-41-226-8-251.ngrok-free.app/get-chat-response', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            user_id: localStorage.getItem("userId"), // Ensure you save the user ID from /start-chat
+            message,
+        }),
+    });
 
-    return (
-        <div>
-            {messages.map((message, index) => (
-                <div key={index} className={message.sender === "user" ? "text-right" : "text-left"}>
-                    <p>{message.text}</p>
-                </div>
-            ))}
-        </div>
-    );
-}
+   return await response.text();
+    
+};
 
-
-
-
-// import firstMessage from "../page1/StartCharts";
-
-// const handleSendMessage = async () => {
-//     if (!input.trim()) return;
-
-//     const userMessage = { text: input, sender: "user" };
-
-
-//     const response = await fetch('/get-chat-response', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({
-//             user_id: userId, // Ensure you save the user ID from /start-chat
-//             message: input,
-//         }),
-//     });
-
-//     const botMessage = await response.text();
-//     setMessages((prev) => [...prev, { text: botMessage, sender: "bot" }]);
-//     return messages;
-// };
-
+export default HandleSendMessage;
 
 

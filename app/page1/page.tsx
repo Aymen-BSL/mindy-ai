@@ -18,6 +18,7 @@ export default function Page1() {
         }
         alert(`Thank you, ${name}! You have selected ${time} for your session.`);
         setIsStartChat(true);
+        
 
     };
 

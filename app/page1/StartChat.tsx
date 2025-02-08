@@ -1,6 +1,8 @@
 "use client";
 import { useEffect } from "react";
 import { useChat } from "../context/ChatContext";
+import { useRouter } from "next/navigation";
+
 
 interface userProps {
     name: string;
@@ -10,7 +12,7 @@ interface userProps {
 
 export default function StartChat({ name, age, conversation_time }: userProps) {
     const { messages, setMessages, userId, setUserId } = useChat();
-
+    const router = useRouter();
 
     useEffect(() => {
 
@@ -41,6 +43,7 @@ export default function StartChat({ name, age, conversation_time }: userProps) {
                 console.log(data.user_id);
                 console.log(data.first_message);
                 localStorage.setItem("userId", data.user_id);
+                router.replace("/page2");
             } catch (error) {
                 console.error(error);
                 alert("Failed to start chat.");
