@@ -1,7 +1,8 @@
 "use client";
 import InfoCard from "@/components/ui/InfoCard";
 import { useState, useEffect } from "react";
-
+import { useChat } from "../context/ChatContext";
+import { useRouter } from "next/navigation";
 
 // Define card data structure
 interface Activity {
@@ -19,6 +20,9 @@ const Home: React.FC = () => {
     const [apiResponse, setApiResponse] = useState<string>("");
     const [activities, setActivities] = useState<Activity[]>([]);
     const [userId, setUserId] = useState<string | null>(null);
+    const { messages, setMessages, userId, setUserId } = useChat();
+
+    const router = useRouter();
 
     // Fetch activities dynamically
     useEffect(() => {
@@ -87,6 +91,9 @@ const Home: React.FC = () => {
             if (!restartChatResponse.ok) throw new Error("Failed to restart chat");
             const restartChatData = await restartChatResponse.text();
             setApiResponse(restartChatData);
+            setMessages([{ text: apiResponse, sender: "bot" }]);
+            router.replace("/page2");
+
         } catch (error) {
             console.error("API Error:", error);
             setErrorMessage("An error occurred while processing your request.");
@@ -115,11 +122,7 @@ const Home: React.FC = () => {
                             {errorMessage}
                         </p>
                     )}
-                    {apiResponse && (
-                        <p className="text-green-500 text-sm whitespace-pre-line">
-                            {apiResponse}
-                        </p>
-                    )}
+
                     <button
                         onClick={handleSubmit}
                         className="p-4 min-w-[150px] bg-[#aa87e5] rounded-full text-xl text-gray-100 font-medium"
